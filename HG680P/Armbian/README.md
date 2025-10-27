@@ -5,7 +5,8 @@
 ## 5gb virtualdisk
 dd if=/dev/zero of=/opt/virtualdisk.img bs=1M count=5120 
 losetup -fP /opt/virtualdisk.img
-fdisk /opt/virtualdisk.img
+losetup #check which loop device 
+fdisk /dev/loop0
 ```
 Output must be like this
 ```bash
@@ -26,6 +27,7 @@ Format the disk
 mkfs -t vfat /dev/loop0p1
 fatlabel /dev/loop0p1 GKJWBOOT
 mkfs -t ext4 /dev/loop0p2
+e2label /dev/loop0p2 GKJWROOT
 ```
 Copy the boot & rootfs
 ```bash
@@ -37,7 +39,7 @@ mount /dev/loop0p2 /mnt/rootfs/	       ### Destination rootfs
 #Copy  originalboot folder or from /boot with some modification
 rsync -av /root/originboot/ /mnt/boot/ 
 #copy the rootfs
-rsync -av --progress --sparse --hard-links --delete --exclude={'/mnt/*','/opt','/proc/*','/sys/*','/dev/*','/tmp/*','/var/log/*','/var/cache/apt/','/usr/src','/var/log.hdd/'} /mnt/srcrootfs/ /mnt/rootfs/
+rsync -av --progress --sparse --hard-links --delete --exclude={'/mnt/*','/opt','/proc/*','/sys/*','/dev/*','/tmp/*','/var/log/*','/var/cache/*','/usr/src','/var/log.hdd/','/var/tmp/*','/var/lib/smartmontools','/var/lib/snmp','/var/lib/apt/lists'} /mnt/srcrootfs/ /mnt/rootfs/
 ```
 Modify the new-boot & new-fstab using this command `blkid |grep loop`
 ```bash
@@ -65,4 +67,14 @@ umount /mnt/boot
 umount /mnt/rootfs
 sync
 losetup  -d /dev/loop0 #detach the vdisk
+```
+### Use Rufus to Burn The Image   
+Possibly require to adjust disk capacity.
+```bash
+#growpart [disk] [partition-number]
+growpart /dev/mmcblk1 2
+#resize the partition
+resize2fs /dev/mmcblk1p2
+##Compress image 
+ 7z a -t7z -mhe=on -mx=9 ndiplayer-v1_1_r0.7z ndiplayer-v1_1_r0.img -p
 ```
