@@ -2,25 +2,26 @@
 
 ###Virtual Disk
 ```bash
+mkdir -p /mnt/dstloop/
 ## 5gb virtualdisk
-dd if=/dev/zero of=/opt/virtualdisk.img bs=1M count=5120 
-losetup -fP /opt/virtualdisk.img
+dd if=/dev/zero of=/mnt/dstloop/virtualdisk.img bs=1M count=3072 
+losetup -fP /mnt/dstloop/virtualdisk.img
 losetup #check which loop device 
 fdisk /dev/loop0
 ```
 Output must be like this
 ```bash
-root@leviticus:/opt# fdisk  -l /opt/virtualdisk.img
-Disk /opt/virtualdisk.img: 7 GiB, 7516192768 bytes, 14680064 sectors
+root@leviticus:/opt# fdisk  -l /dev/loop0
+Disk /dev/loop0: 3 GiB, 3221225472 bytes, 6291456 sectors
 Units: sectors of 1 * 512 = 512 bytes
 Sector size (logical/physical): 512 bytes / 512 bytes
 I/O size (minimum/optimal): 512 bytes / 512 bytes
 Disklabel type: dos
-Disk identifier: 0x8c12ba80
+Disk identifier: 0x31ed086b
 
-Device                Boot   Start      End  Sectors  Size Id Type
-/opt/virtualdisk.img1         2048  1048575  1046528  511M  c W95 FAT32 (LBA)
-/opt/virtualdisk.img2      1048576 14680063 13631488  6.5G 83 Linux
+Device       Boot   Start     End Sectors  Size Id Type
+/dev/loop0p1         2048 1026047 1024000  500M  c W95 FAT32 (LBA)
+/dev/loop0p2      1026048 6291455 5265408  2.5G 83 Linux
 ```
 Format the disk
 ```bash
@@ -33,13 +34,14 @@ Copy the boot & rootfs
 ```bash
 mkdir -p /mnt/boot /mnt/rootfs /mnt/srcrootfs
 mount /dev/loop0p1 /mnt/boot
-mount /dev/mmcblk1p2 /mnt/srcrootfs  ### Source rootfs
 mount /dev/loop0p2 /mnt/rootfs/	       ### Destination rootfs
+mount /dev/mmcblk1p2 /mnt/srcrootfs    ### Remount / for cloning
 
 #Copy  originalboot folder or from /boot with some modification
-rsync -av /root/originboot/ /mnt/boot/ 
+rsync -av /mnt/originboot/ /mnt/boot/
 #copy the rootfs
-rsync -av --progress --sparse --hard-links --delete --exclude={'/mnt/*','/opt','/proc/*','/sys/*','/dev/*','/tmp/*','/var/log/*','/var/cache/*','/usr/src','/var/log.hdd/','/var/tmp/*','/var/lib/smartmontools','/var/lib/snmp','/var/lib/apt/lists'} /mnt/srcrootfs/ /mnt/rootfs/
+rsync -av --progress --sparse --hard-links --delete --exclude={'/mnt/','/opt/*','/proc/*','/sys/*','/dev/*','/tmp/*','/var/log/*','/var/cache/*','/usr/src','/usr/include','/var/log.hdd/','/var/tmp/*','/var/lib/smartmontools','/var/lib/snmp','/var/lib/apt/lists','/var/lib/NetworkManager/*','*.cache/*','*.config/*','.bash_history'} /mnt/srcrootfs/ /mnt/rootfs/
+mkdir /mnt/rootfs/mnt
 ```
 Modify the new-boot & new-fstab using this command `blkid |grep loop`
 ```bash
