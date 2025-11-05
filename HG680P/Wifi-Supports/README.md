@@ -15,9 +15,9 @@ HG680P - Pantat hitam, menggunakan wireless driver yang berbeda dengan pantat pu
     mkdir -p /opt/toolchain
     cd /opt/toolchain
     # Download the compilation tools
-    wget https://github.com/ophub/kernel/releases/download/dev/arm-gnu-toolchain-13.3.rel1-aarch64-aarch64-none-elf.tar.xz
+    wget https://github.com/ophub/kernel/releases/download/dev/arm-gnu-toolchain-14.3.rel1-x86_64-aarch64-none-linux-gnu.tar.xz
     # Extract the tools & clean 
-    tar -Jxf arm-gnu-toolchain-13.3.rel1-aarch64-aarch64-none-elf.tar.xz
+    tar -Jxf arm-gnu-toolchain-14.3.rel1-x86_64-aarch64-none-linux-gnu.tar.xz
     # Install other compilation dependencies (optional; you can manually install missing dependencies based on error messages)
     armbian-kernel -u
 ```
@@ -29,10 +29,10 @@ HG680P - Pantat hitam, menggunakan wireless driver yang berbeda dengan pantat pu
     git clone https://github.com/jwrdegoede/rtl8189ES_linux
     cd rtl8189ES_linux
     # Set up the compilation environment
-    gun_file="arm-gnu-toolchain-13.3.rel1-aarch64-aarch64-none-elf.tar.xz"
+    gun_file="arm-gnu-toolchain-14.3.rel1-x86_64-aarch64-none-linux-gnu.tar.xz"
     toolchain_path="/opt/toolchain"
     toolchain_name="gcc"
-    export CROSS_COMPILE="${toolchain_path}/${gun_file//.tar.xz/}/bin/aarch64-none-elf-"
+    export CROSS_COMPILE="${toolchain_path}/${gun_file//.tar.xz/}/bin/aarch64-none-linux-gnu-"
     export CC="${CROSS_COMPILE}gcc"
     export LD="${CROSS_COMPILE}ld.bfd"
     export ARCH="arm64"
