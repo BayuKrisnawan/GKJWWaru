@@ -1,9 +1,17 @@
 
 # Build Kernel - Support WIFI
+## Downgrade 5.10.x-stable
+Kami melakukan downgrade ke 5.10.x stable kernel karena dukungan hardware yang sepertinya lebih baik dibandingkan versi yang lain. 
+```bash
+ armbian-update -k 5.10 -u stable
+ ```
+
+
 
 ## Installation
 
 HG680P - Pantat hitam, menggunakan wireless driver yang berbeda dengan pantat putih. HG680P putih tidak memerlukan update ini, namun dibutuhkan untuk HG680P hitam #8189fs#. 
+
 ### Updating to the latest kernel
 ```bash
   armbian-sync
