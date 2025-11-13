@@ -1,10 +1,29 @@
-##Backup EMMC to SDCARD
+##Creating NDI Image
+
+###Version Update
+```bash
+Versi 1.1
+- Initial Release
+- Default Zip Password - ada di https://kontrol.gkjw.my.id
+
+Versi 1.2
+- Menggunakan kernel 6.1 
+- Disable Wireless Driver
+- Cleanup netplan & network-manager, gunakan ifupdown (/etc/network/interfaces)
+  + Mac Address Duplicate saat install - Generate MAC check valid apa tidak dulu ya!
+- Create NDIGUARD 
+- Create ETHGUARD  
+- Create HOSTGUARD - Replace html title with hostname.
+- Default IP 192.168.100.222 / 10.10.104.222
+``` 
 
 ###Virtual Disk
 ```bash
 mkdir -p /mnt/dstloop/
-## 5gb virtualdisk
-dd if=/dev/zero of=/mnt/dstloop/virtualdisk.img bs=1M count=3072 
+mount /dev/sda1 /mnt/dstloop/  #sda jika menggunakan flash disk. 
+# Mount MMC Fat32 to this folder
+## 3.5gb virtualdisk
+dd if=/dev/zero of=/mnt/dstloop/virtualdisk.img bs=1M count=3584 
 losetup -fP /mnt/dstloop/virtualdisk.img
 losetup #check which loop device 
 fdisk /dev/loop0
@@ -39,9 +58,9 @@ mount /dev/mmcblk1p2 /mnt/srcrootfs    ### Remount / for cloning
 
 #Copy  originalboot folder or from /boot with some modification
 rsync -av /mnt/originboot/ /mnt/boot/
-#copy the rootfs
-rsync -av --progress --sparse --hard-links --delete --exclude={'/mnt/','/opt/*','/proc/*','/sys/*','/dev/*','/tmp/*','/var/log/*','/var/cache/*','/usr/src','/usr/include','/var/log.hdd/','/var/tmp/*','/var/lib/smartmontools','/var/lib/snmp','/var/lib/apt/lists','/var/lib/NetworkManager/*','*.cache/*','*.config/*','.bash_history'} /mnt/srcrootfs/ /mnt/rootfs/
-mkdir /mnt/rootfs/mnt
+#copy the rootfs 
+rsync -av --progress --sparse --hard-links --delete --exclude={'/ddbr/','/mnt/*','/opt/*','/proc/*','/sys/*','/dev/*','/tmp/*','/var/log/*','/var/cache/*','/usr/src','/usr/include','/var/log.hdd/','/var/tmp/*','/var/lib/smartmontools','/var/lib/snmp','/var/lib/apt/lists','/var/lib/NetworkManager/*','*.cache/*','.bash_history'} /mnt/srcrootfs/ /mnt/rootfs/
+
 ```
 Modify the new-boot & new-fstab using this command `blkid |grep loop`
 ```bash
