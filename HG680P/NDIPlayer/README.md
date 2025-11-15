@@ -15,6 +15,9 @@ Versi 1.2
 - Create ETHGUARD  
 - Create HOSTGUARD - Replace html title with hostname.
 - Default IP 192.168.100.222 / 10.10.104.222
+
+Versi 2.0 - Rencana
+- Menggunakan Armbian Official Debian [Trixie]
 ``` 
 
 ###Virtual Disk
