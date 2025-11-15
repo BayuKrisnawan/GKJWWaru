@@ -7,7 +7,7 @@ Versi 1.1
 - Default Zip Password - ada di https://kontrol.gkjw.my.id
 
 Versi 1.2
-- Menggunakan kernel 6.1 
+- Menggunakan kernel 6.1-ophub 
 - Disable Wireless Driver
 - Cleanup netplan & network-manager, gunakan ifupdown (/etc/network/interfaces)
   + Mac Address Duplicate saat install - Generate MAC check valid apa tidak dulu ya!
