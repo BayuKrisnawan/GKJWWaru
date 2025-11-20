@@ -16,8 +16,15 @@ Versi 1.2
 - Create HOSTGUARD - Replace html title with hostname.
 - Default IP 192.168.100.222 / 10.10.104.222
 
-Versi 2.0 - Rencana
-- Menggunakan Armbian Official Debian [Trixie]
+Versi 2.0 - 
+- Menggunakan Armbian Community Official Debian Bookworm
+- Jauh lebih stabil terutama bagian network.
+- Tidak perlu update manual mac address
+
+Versi 2.1 
+- Final update.
+- Simple install scripts /root/install-aml.sh
+
 ``` 
 
 ###Virtual Disk
@@ -100,5 +107,5 @@ growpart /dev/mmcblk1 2
 #resize the partition
 resize2fs /dev/mmcblk1p2
 ##Compress image 
- 7z a -t7z -mhe=on -mx=9 ndiplayer-v1_1_r0.7z ndiplayer-v1_1_r0.img -p
+ 7z a -t7z -mhe=on -mx=9 ndiplayer-v1_1_r0.7z virtualdisk.img -p
 ```
